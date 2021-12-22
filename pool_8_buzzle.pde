@@ -9,15 +9,15 @@
   7) Spliting The Code
 */
 
-int ballX = 350;
-int ballY = 500;
+int ballX = 335;
+int ballY = 505;
 
 char process = '0';
 
-int leftBorder = 150;
-int rightBorder = 450;
-int upperBorder = 150;
-int lowerBorder = 650;
+int leftBorder = 160;
+int rightBorder = 440;
+int upperBorder = 155;
+int lowerBorder = 645;
 
 int ball1[] = new int[2];
 int ball2[] = new int[2];
@@ -33,13 +33,13 @@ int terminal4[] = new int [2];
 int terminal5[] = new int [2];
 int terminal6[] = new int [2];
 
-int radius = 25;
-int radius1 = 25;
-int radius2 = 25;
-int radius3 = 25;
-int radius4 = 25;
-int radius5 = 25;
-int radius6 = 25;
+int radius = 35;
+int radius1 = 35;
+int radius2 = 35;
+int radius3 = 35;
+int radius4 = 35;
+int radius5 = 35;
+int radius6 = 35;
 
 int positions[] = new int[8];
 float speed = 5;
@@ -52,63 +52,85 @@ boolean ball4collided = false;
 boolean ball5collided = false;
 boolean ball6collided = false;
 
+int remaining = 4;
+boolean gameOver = false;
+
+
 PImage table;
 float randomTable;
 
 void setup(){
   size(600, 800);
+  randomTable = int(random(4));
+  startLevel();
+}
+
+void startLevel(){
+  process = '0';
+  remaining = 4;
+  ballX = 335;
+  ballY = 505;
   
-  ball1[0] = 200;
-  ball1[1] = 500;
+  ball1[0] = 195;
+  ball1[1] = 505;
   
-  ball2[0] = 400;
-  ball2[1] = 500;
+  ball2[0] = 405;
+  ball2[1] = 505;
   
-  ball3[0] = 225;
+  ball3[0] = 230;
   ball3[1] = 225;
   
-  ball4[0] = 375;
-  ball4[1] = 200;
+  ball4[0] = 370;
+  ball4[1] = 190;
+  
+  radius = 35;
+  radius1 = 35;
+  radius2 = 35;
+  radius3 = 35;
+  radius4 = 35;
+  radius5 = 35;
+  radius6 = 35;
   
   terminal1[0] = 130;
-  terminal1[1] = 500;
+  terminal1[1] = 505;
   
   terminal2[0] = 470;
-  terminal2[1] = 500;
+  terminal2[1] = 505;
   
   terminal3[0] = 130;
   terminal3[1] = 225;
   
-  terminal4[0] = 375;
+  terminal4[0] = 370;
   terminal4[1] = 120;
   
-  terminal5[0] = 225;
+  terminal5[0] = 230;
   terminal5[1] = 120;
 
   
-  randomTable = int(random(4));
+  
   if(randomTable == 0)
     table = loadImage("red-table.png");
-  if(randomTable == 1)
+  else if(randomTable == 1)
     table = loadImage("green-table.png");
-  if(randomTable == 2)
+  else if(randomTable == 2)
     table = loadImage("blue-table.png");
-  if(randomTable == 3)
+  else
     table = loadImage("cyan-table.png");
-  
-  
 }
 
-void draw(){  
+void draw(){
   noStroke();
   background(200);
   fill(0);
   textSize(18);
-  text("Use The Arrwo Keys To Move The White Ball In Straight Lines",50, 10, 500, 100);
-  text("The Goal Is To Put All The Red Balls In The Pockets",50, 70, 500, 100);
-  text("PSSST: If You Get Stuck Please Rerun The Game (We Will Make A Retry Button In The Final Project)", 50, 720, 500, 100);
+  text("Use The Arrwo Keys To Move The White Ball In Straight Lines (the ball will move until hitting another ball or reach the wall)",50, 10, 450, 100);
+  text("The Goal Is To Put All The Red Balls In The Pockets", 50, 720, 500, 100);
   
-  if ((keyPressed && (key == CODED))) { // If it’s a coded key
+  if (mousePressed && mouseButton == LEFT && mouseY < 50 && mouseX > width - 100) {
+    startLevel();
+  }
+  
+  if ((keyPressed && (key == CODED)) && remaining > 0) { // If it’s a coded key
     if (keyCode == LEFT && process == '0' && ballX != leftBorder) { // If it’s the left arrow
       process = 'l';
     } 
@@ -141,7 +163,9 @@ void draw(){
   image(table, 100, 100);
   if(randomTable == 0)
     fill(100);
-  else
+  else if(randomTable == 2)
+    fill(150);
+  else 
     fill(0);
   circle(terminal1[0],terminal1[1],radius);
   circle(terminal2[0],terminal2[1],radius);
@@ -156,6 +180,20 @@ void draw(){
   circle(ball2[0],ball2[1],radius2);
   circle(ball3[0],ball3[1],radius3);
   circle(ball4[0],ball4[1],radius4);
+  
+  if(remaining == 0){
+    println(remaining);
+    fill(0,0,0,200);
+    rect(0,0,width,height);
+    textSize(80);
+    fill(255);
+    text("YOU WIN", 130, 300);
+  }
+  fill(0,255,0);
+  rect(width - 100, 0, 100, 50);
+  textSize(35);
+  fill(255);
+  text("Retry", width - 90, 40);
   
   keyPressed = false;  
 }
@@ -203,11 +241,11 @@ void moveLeft(){
          collided = true;
        }
        else if((ballX == terminal1[0] && ballY == terminal1[1])
-       || (ballX == terminal2[0]  && ballY == terminal1[1])
-       || (ballX == terminal3[0]  && ballY == terminal1[1])
-       || (ballX == terminal4[0]  && ballY == terminal1[1])
-       || (ballX == terminal5[0]  && ballY == terminal1[1])
-       || (ballX == terminal6[0]  && ballY == terminal1[1])){
+       || (ballX == terminal2[0]  && ballY == terminal2[1])
+       || (ballX == terminal3[0]  && ballY == terminal3[1])
+       || (ballX == terminal4[0]  && ballY == terminal4[1])
+       || (ballX == terminal5[0]  && ballY == terminal5[1])
+       || (ballX == terminal6[0]  && ballY == terminal6[1])){
          exit();
        }
        else if(ballX == leftBorder && noLeftPockets){
@@ -232,6 +270,7 @@ void moveLeft(){
        ball1[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball1[0] == leftBorder && noLeftPockets){
        ball1collided = false;
@@ -254,6 +293,7 @@ void moveLeft(){
        ball2[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball2[0] == leftBorder && noLeftPockets){
        ball2collided = false;
@@ -275,6 +315,7 @@ void moveLeft(){
        ball3[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball3[0] == leftBorder && noLeftPockets){
        ball3collided = false;
@@ -296,6 +337,7 @@ void moveLeft(){
        ball4[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball4[0] == leftBorder && noLeftPockets){
        ball4collided = false;
@@ -317,6 +359,7 @@ void moveLeft(){
        ball5[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball5[0] == leftBorder && noLeftPockets){
        ball5collided = false;
@@ -338,6 +381,7 @@ void moveLeft(){
        ball6[0] =-100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball6[0] == leftBorder && noLeftPockets){
        ball6collided = false;
@@ -393,11 +437,11 @@ void moveRight(){
          collided = true;
        }
        else if((ballX == terminal1[0] && ballY == terminal1[1])
-       || (ballX == terminal2[0]  && ballY == terminal1[1])
-       || (ballX == terminal3[0]  && ballY == terminal1[1])
-       || (ballX == terminal4[0]  && ballY == terminal1[1])
-       || (ballX == terminal5[0]  && ballY == terminal1[1])
-       || (ballX == terminal6[0]  && ballY == terminal1[1])){
+       || (ballX == terminal2[0]  && ballY == terminal2[1])
+       || (ballX == terminal3[0]  && ballY == terminal3[1])
+       || (ballX == terminal4[0]  && ballY == terminal4[1])
+       || (ballX == terminal5[0]  && ballY == terminal5[1])
+       || (ballX == terminal6[0]  && ballY == terminal6[1])){
          exit();
        }
        else if(ballX == rightBorder && noRightPockets){
@@ -422,6 +466,7 @@ void moveRight(){
        ball1[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball1[0] == rightBorder && noRightPockets){
        ball1collided = false;
@@ -443,6 +488,7 @@ void moveRight(){
        ball2[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball2[0] == rightBorder && noRightPockets){
        ball2collided = false;
@@ -464,6 +510,7 @@ void moveRight(){
        ball3[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball3[0] == rightBorder && noRightPockets){
        ball3collided = false;
@@ -485,6 +532,7 @@ void moveRight(){
        ball4[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball4[0] == rightBorder && noRightPockets){
        ball4collided = false;
@@ -506,6 +554,7 @@ void moveRight(){
        ball5[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball5[0] == rightBorder && noRightPockets){
        ball5collided = false;
@@ -527,6 +576,7 @@ void moveRight(){
        ball6[0] =-100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball6[0] == rightBorder && noRightPockets){
        ball6collided = false;
@@ -580,11 +630,11 @@ void moveUp(){
          collided = true;
        }
        else if((ballX == terminal1[0] && ballY == terminal1[1])
-       || (ballX == terminal2[0]  && ballY == terminal1[1])
-       || (ballX == terminal3[0]  && ballY == terminal1[1])
-       || (ballX == terminal4[0]  && ballY == terminal1[1])
-       || (ballX == terminal5[0]  && ballY == terminal1[1])
-       || (ballX == terminal6[0]  && ballY == terminal1[1])){
+       || (ballX == terminal2[0]  && ballY == terminal2[1])
+       || (ballX == terminal3[0]  && ballY == terminal3[1])
+       || (ballX == terminal4[0]  && ballY == terminal4[1])
+       || (ballX == terminal5[0]  && ballY == terminal5[1])
+       || (ballX == terminal6[0]  && ballY == terminal6[1])){
          exit();
        }
        else if(ballY == upperBorder && noUpperPockets){
@@ -609,6 +659,7 @@ void moveUp(){
        ball1[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball1[0] == upperBorder && noUpperPockets){
        ball1collided = false;
@@ -630,6 +681,7 @@ void moveUp(){
        ball2[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball2[0] == upperBorder && noUpperPockets){
        ball2collided = false;
@@ -651,6 +703,7 @@ void moveUp(){
        ball3[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball3[1] == upperBorder && noUpperPockets){
        ball3collided = false;
@@ -672,6 +725,7 @@ void moveUp(){
        ball4[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball4[0] == upperBorder && noUpperPockets){
        ball4collided = false;
@@ -693,6 +747,7 @@ void moveUp(){
        ball5[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball5[0] == upperBorder && noUpperPockets){
        ball5collided = false;
@@ -714,6 +769,7 @@ void moveUp(){
        ball6[0] =-100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball6[0] == upperBorder && noUpperPockets){
        ball6collided = false;
@@ -768,11 +824,11 @@ boolean noLowerPockets = true;
          collided = true;
        }
        else if((ballX == terminal1[0] && ballY == terminal1[1])
-       || (ballX == terminal2[0]  && ballY == terminal1[1])
-       || (ballX == terminal3[0]  && ballY == terminal1[1])
-       || (ballX == terminal4[0]  && ballY == terminal1[1])
-       || (ballX == terminal5[0]  && ballY == terminal1[1])
-       || (ballX == terminal6[0]  && ballY == terminal1[1])){
+       || (ballX == terminal2[0]  && ballY == terminal2[1])
+       || (ballX == terminal3[0]  && ballY == terminal3[1])
+       || (ballX == terminal4[0]  && ballY == terminal4[1])
+       || (ballX == terminal5[0]  && ballY == terminal5[1])
+       || (ballX == terminal6[0]  && ballY == terminal6[1])){
          exit();
        }
        else if(ballY == lowerBorder && noLowerPockets){
@@ -797,6 +853,7 @@ boolean noLowerPockets = true;
        ball1[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball1[0] == lowerBorder && noLowerPockets){
        ball1collided = false;
@@ -818,6 +875,7 @@ boolean noLowerPockets = true;
        ball2[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball2[0] == lowerBorder && noLowerPockets){
        ball2collided = false;
@@ -839,6 +897,7 @@ boolean noLowerPockets = true;
        ball3[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball3[0] == lowerBorder && noLowerPockets){
        ball3collided = false;
@@ -860,6 +919,7 @@ boolean noLowerPockets = true;
        ball4[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball4[0] == lowerBorder && noLowerPockets){
        ball4collided = false;
@@ -881,6 +941,7 @@ boolean noLowerPockets = true;
        ball5[0] = -100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball5[0] == lowerBorder && noLowerPockets){
        ball5collided = false;
@@ -902,6 +963,7 @@ boolean noLowerPockets = true;
        ball6[0] =-100;
        process = '0';
        collided = false;
+       remaining--;
      }
      else if(ball6[0] == lowerBorder && noLowerPockets){
        ball6collided = false;
