@@ -2,11 +2,11 @@
   A "To Do List" In The Final Project:
   1) Levels (about 10 levels)
   2) Good Tutorials In The First 3 levels
-  3) Retry Button
-  4) Sound Effects
-  5) MEMES <3
-  6) Improve Visualizations
-  7) Spliting The Code
+  3) Sound Effects
+  4) Improve Visualizations
+  5) Refractor The Code
+  6) try making a saving system
+  7) implement the transformations
 */
 
 int ballX = 335;
@@ -25,7 +25,7 @@ int ball3[] = new int[2];
 int ball4[] = new int[2];
 int ball5[] = new int[2];
 int ball6[] = new int[2];
-
+//PVector v = new PVector(1,2);
 int terminal1[] = new int [2];
 int terminal2[] = new int [2];
 int terminal3[] = new int [2];
@@ -53,7 +53,7 @@ boolean ball5collided = false;
 boolean ball6collided = false;
 
 int remaining = 4;
-boolean gameOver = false;
+boolean lostGame = false;
 
 
 PImage table;
@@ -66,7 +66,9 @@ void setup(){
 }
 
 void startLevel(){
+  lostGame = false;
   process = '0';
+  collided = false;
   remaining = 4;
   ballX = 335;
   ballY = 505;
@@ -130,17 +132,17 @@ void draw(){
     startLevel();
   }
   
-  if ((keyPressed && (key == CODED)) && remaining > 0) { // If it’s a coded key
-    if (keyCode == LEFT && process == '0' && ballX != leftBorder) { // If it’s the left arrow
+  if ((keyPressed && (key == CODED)) && remaining > 0) { 
+    if (keyCode == LEFT && process == '0' && ballX != leftBorder) {
       process = 'l';
     } 
-    else if (keyCode == RIGHT && process == '0' && ballX != rightBorder) { // If it’s the right arrow
+    else if (keyCode == RIGHT && process == '0' && ballX != rightBorder) { 
       process = 'r';
     }
-    else if (keyCode == UP && process == '0'  && ballY != upperBorder) { // If it’s the right arrow
+    else if (keyCode == UP && process == '0'  && ballY != upperBorder) {
       process = 'u';
     }
-    else if (keyCode == DOWN && process == '0'  && ballY != lowerBorder) { // If it’s the right arrow
+    else if (keyCode == DOWN && process == '0'  && ballY != lowerBorder) {
       process = 'd';
     }
   }
@@ -182,13 +184,23 @@ void draw(){
   circle(ball4[0],ball4[1],radius4);
   
   if(remaining == 0){
-    println(remaining);
     fill(0,0,0,200);
     rect(0,0,width,height);
     textSize(80);
     fill(255);
     text("YOU WIN", 130, 300);
   }
+
+  if(lostGame){
+    fill(0,0,0,200);
+    rect(0,0,width,height);
+    textSize(80);
+    fill(255);
+    text("YOU LOST ", 100, 300);
+    textSize(30);
+    text("The White Ball Fell Into A pocket", 60, 350);
+  }
+  
   fill(0,255,0);
   rect(width - 100, 0, 100, 50);
   textSize(35);
@@ -246,7 +258,8 @@ void moveLeft(){
        || (ballX == terminal4[0]  && ballY == terminal4[1])
        || (ballX == terminal5[0]  && ballY == terminal5[1])
        || (ballX == terminal6[0]  && ballY == terminal6[1])){
-         exit();
+         collided = true;
+         lostGame = true;
        }
        else if(ballX == leftBorder && noLeftPockets){
          collided = true;
@@ -287,7 +300,6 @@ void moveLeft(){
      || (ball2[0] == terminal4[0] - 10 && ball2[1] == terminal4[1])
      || (ball2[0] == terminal5[0] - 10 && ball2[1] == terminal5[1])
      || (ball2[0] == terminal6[0] - 10 && ball2[1] == terminal6[1])){
-       println("AH");
        ball2collided = false;
        radius2 = 0;
        ball2[0] = -100;
@@ -442,7 +454,8 @@ void moveRight(){
        || (ballX == terminal4[0]  && ballY == terminal4[1])
        || (ballX == terminal5[0]  && ballY == terminal5[1])
        || (ballX == terminal6[0]  && ballY == terminal6[1])){
-         exit();
+         collided = true;
+         lostGame = true;
        }
        else if(ballX == rightBorder && noRightPockets){
          collided = true;
@@ -635,7 +648,8 @@ void moveUp(){
        || (ballX == terminal4[0]  && ballY == terminal4[1])
        || (ballX == terminal5[0]  && ballY == terminal5[1])
        || (ballX == terminal6[0]  && ballY == terminal6[1])){
-         exit();
+         collided = true;
+         lostGame = true;
        }
        else if(ballY == upperBorder && noUpperPockets){
          collided = true;
@@ -829,7 +843,8 @@ boolean noLowerPockets = true;
        || (ballX == terminal4[0]  && ballY == terminal4[1])
        || (ballX == terminal5[0]  && ballY == terminal5[1])
        || (ballX == terminal6[0]  && ballY == terminal6[1])){
-         exit();
+         collided = true;
+         lostGame = true;
        }
        else if(ballY == lowerBorder && noLowerPockets){
          collided = true;
