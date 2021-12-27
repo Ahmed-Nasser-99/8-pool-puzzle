@@ -25,7 +25,7 @@ int ball3[] = new int[2];
 int ball4[] = new int[2];
 int ball5[] = new int[2];
 int ball6[] = new int[2];
-//PVector v = new PVector(1,2);
+
 int terminal1[] = new int [2];
 int terminal2[] = new int [2];
 int terminal3[] = new int [2];
@@ -67,8 +67,8 @@ void setup(){
 
 void startLevel(){
   lostGame = false;
-  process = '0';
   collided = false;
+  process = '0';
   remaining = 4;
   ballX = 335;
   ballY = 505;
