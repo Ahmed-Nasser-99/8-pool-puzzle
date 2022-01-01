@@ -1,25 +1,36 @@
 void startLevel(boolean isNotRetry){
+  // set the collided ball to 0 to stop rotating them
+  i = 0;
+  
+  // if the player completed the level it can be increased again
   levelIncreased = false;
+  
+  // if it is retry don't generate a new table and background
   if(isNotRetry == true){
     randomTable = int(random(4));
     randomBackground = int(random(5));
   }
-     
-   
+  
+  // while the new random table and background equal the last ones
+  // generate another one
   while(lastRandomTable == randomTable && isNotRetry == true){
     randomTable = int(random(4));
   }
   
   while(randomBackground == lastRandomBackground && isNotRetry == true){
-    randomTable = int(random(5));
+    randomBackground = int(random(5));
   }
-   
+  
+  // just remember the last random table and background so it will not be displayed again
   lastRandomTable = randomTable;
+  lastRandomBackground = randomBackground;
   lostGame = false;
   collided = false;
   process = '0';
   radius = 35;
   
+  
+  // according to the level the positions of the balls, terminals and the "remaining" will change
   if(level == 1){
     remaining = 1;
     balls[0].x = 300;
@@ -481,6 +492,8 @@ void startLevel(boolean isNotRetry){
 
   }
   
+  
+  // set the table and the background value to an image according to the random variables
   if(randomTable == 0)
     table = loadImage("red-table.png");
   else if(randomTable == 1)
@@ -491,7 +504,7 @@ void startLevel(boolean isNotRetry){
     table = loadImage("cyan-table.png");
     
   if(randomBackground == 0)
-      background = loadImage("blue-background.PNG");
+    background = loadImage("blue-background.PNG");
   else if(randomBackground == 1)
     background = loadImage("green-background.PNG");
   else if(randomBackground == 2)
