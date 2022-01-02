@@ -4,7 +4,8 @@ import processing.sound.*;
 // when the game is launched for the first time
 void setup(){
   size(600, 800);
-  
+  if (level == 14)
+    gameFinished = true;
   // load the level value from the text file
   // levelStr is an array of strings which contains the level value as a string 
   // in the first element [0]
@@ -49,13 +50,13 @@ void setup(){
   lastRandomTable = 100;
   lastRandomBackground = 100;
   
-  // start level and it is not a retry for the level
-  startLevel(true);
+ 
 }
 
 void draw(){
   noStroke();
-  background(background);
+  if(levelStarted == true)
+    background(background);
   
   // if we are not in the mainmenu
   if(mainmenu == false){
@@ -103,8 +104,9 @@ void draw(){
     }
   }
   
+  if(levelStarted)
   // render the image of the table at the center of the screen
-  image(table, width / 2, height / 2);
+    image(table, width / 2, height / 2);
   
   // set the terminals color according to the rendered table
   if(randomTable == 0) // black table
@@ -224,8 +226,27 @@ void draw(){
   if(level == 3 && process == '0' && remaining == 1)
     image(arrowLeft, 295, 300, 75, 75);
   
+  
+  
   // if the player compeleted the level and it is not the last level
-  if(remaining == 0 && level < 13){  
+  if(remaining == 0 && level < 14 && mainmenu == false){  
+    
+    // levelIncreased is set to false every start level
+    // so it will compute this piece of code JUST ONCE
+    if(levelIncreased == false){
+      
+      // play the sound
+      // 1 -> rate of the clip (speed of the clip) || 0.5 -> is the sound of the clip (amp)
+      level++;
+      // saving system 
+      levelStr[0] = "" + level;
+      saveStrings("./data/level.txt",levelStr);
+      levelIncreased = true;
+      
+      if(level < 14)
+      levelCompleted.play(1, 0.5);
+    }
+    
     fill(0,0,0,200);
     rect(0,0,width,height);
     textSize(50);
@@ -237,24 +258,10 @@ void draw(){
     textSize(50);
     fill(255);
     text("NEXT LEVEL", width / 2 - 135, 650);
-    
-    // levelIncreased is set to false every start level
-    // so it will compute this piece of code JUST ONCE
-    if(levelIncreased == false){
-      levelCompleted.play(1, 0.5);
-      // play the sound
-      // 1 -> rate of the clip (speed of the clip) || 0.5 -> is the sound of the clip (amp)
-      level++;
-      
-      // saving system 
-      levelStr[0] = "" + level;
-      saveStrings("./data/level.txt",levelStr);
-      levelIncreased = true;  
-    }
   }
   
   // if the player finished the game
-  if(level == 13 && remaining == 0){
+  if(level == 14 && remaining == 0 && mainmenu == false){
     stroke(0);
     strokeWeight(2);
     gameFinished = true;
@@ -279,9 +286,13 @@ void draw(){
     fill(255);
     text("DR SHAIMAA RIZK", 140, 600);
     text("ENG MOFIDA MAHMOUD", 80, 650);
+    
     fill(255,0,0);
+    rect(10, 710, width-20,60);
+    fill(255);
     textSize(30);
-    text("PLEASE CONSIDER GIVING US A BONUS", 30, 750);
+    text("PLEASE CONSIDER GIVING US A BONUS", 20, 750);
+    
     if(gameCompletedSound == false){
       gameCompleted.play();
       gameCompletedSound = true;
@@ -350,7 +361,7 @@ void draw(){
     fill(255);
     image(instructions, 25, height-25);
     
-    if(level == 13 && startWithCompleteClosed == false){
+    if(level == 14 && startWithCompleteClosed == false){
       startWithComplete = true;
       fill(0,0,0,200);
       rect(0,0,width,height);

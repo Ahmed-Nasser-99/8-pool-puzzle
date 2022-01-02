@@ -3,7 +3,7 @@ void mouseReleased() {
   // if we are in the mainmenu
   if(mainmenu == true){
     // the user clicked on the reset button while the showInstructions is false
-    if (mouseY < 50 && mouseX > width - 100 && showInstructions == false) {
+    if (mouseY < 50 && mouseX > width - 100 && showInstructions == false && startWithComplete == false) {
         resetConfirmation = true;
     }
     
@@ -77,6 +77,7 @@ void mouseReleased() {
     // pressed retry after losing the level (the white ball fell into a pocket)
     if (mouseY > 500 && mouseY < 570 && mouseX > width / 2 - 180 && mouseX < width / 2 - 180 + 360 && lostGame && gameFinished == false) {
       startLevel(false);
+      println("sd");
     }
     
     // pressed return

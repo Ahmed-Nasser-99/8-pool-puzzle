@@ -5,6 +5,8 @@ void startLevel(boolean isNotRetry){
   // if the player completed the level it can be increased again
   levelIncreased = false;
   
+  levelStarted = true;
+  
   // if it is retry don't generate a new table and background
   if(isNotRetry == true){
     randomTable = int(random(4));
@@ -20,6 +22,27 @@ void startLevel(boolean isNotRetry){
   while(randomBackground == lastRandomBackground && isNotRetry == true){
     randomBackground = int(random(5));
   }
+  
+  // set the table and the background value to an image according to the random variables
+  if(randomTable == 0)
+    table = loadImage("red-table.png");
+  else if(randomTable == 1)
+    table = loadImage("green-table.png");
+  else if(randomTable == 2)
+    table = loadImage("blue-table.png");
+  else
+    table = loadImage("cyan-table.png");
+    
+  if(randomBackground == 0)
+    background = loadImage("blue-background.PNG");
+  else if(randomBackground == 1)
+    background = loadImage("green-background.PNG");
+  else if(randomBackground == 2)
+    background = loadImage("orange-background.PNG");
+  else if(randomBackground == 3)
+    background = loadImage("pink-background.PNG");
+  else
+    background = loadImage("purple-background.PNG");
   
   // just remember the last random table and background so it will not be displayed again
   lastRandomTable = randomTable;
@@ -449,6 +472,9 @@ void startLevel(boolean isNotRetry){
 
   }
   
+  if(level == 14)
+    level = 13;
+  
   if(level == 13){
     remaining = 6;
     balls[0].x = 230;
@@ -493,25 +519,5 @@ void startLevel(boolean isNotRetry){
   }
   
   
-  // set the table and the background value to an image according to the random variables
-  if(randomTable == 0)
-    table = loadImage("red-table.png");
-  else if(randomTable == 1)
-    table = loadImage("green-table.png");
-  else if(randomTable == 2)
-    table = loadImage("blue-table.png");
-  else
-    table = loadImage("cyan-table.png");
-    
-  if(randomBackground == 0)
-    background = loadImage("blue-background.PNG");
-  else if(randomBackground == 1)
-    background = loadImage("green-background.PNG");
-  else if(randomBackground == 2)
-    background = loadImage("orange-background.PNG");
-  else if(randomBackground == 3)
-    background = loadImage("pink-background.PNG");
-  else
-    background = loadImage("purple-background.PNG");
   
 }

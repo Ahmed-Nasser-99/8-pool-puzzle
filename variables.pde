@@ -102,6 +102,8 @@ boolean mainmenu = true;
 // to detect whether or the reset confirmation layer is on or off
 boolean resetConfirmation = false;
 
+boolean levelStarted = false;
+
 // to detect whether or the instructions layer is on or off
 boolean showInstructions = false;
 
